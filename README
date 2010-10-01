@@ -1,0 +1,97 @@
+Illegal WireTaps:
+
+========================================================================================================================
+
+After uncovering years of government malfeasance, you are tasked with leading a team of government programmers to decode copious amounts of possibly illegal wiretaps. Your congressional hearing is coming up, and you need to have these wiretaps decoded as soon as possible so you can give as informative testimony as possible (and clear your posterior of any wrong doing!). Unfortunately, government programmers are not the most well adjusted, sharpest tools in the shed, and they require decisive and firm leadership (e.g. you) to guide them. Programmers are assigned integer numbers to protect their classified identities, while wiretap victims are referred to by their first names.
+
+Due to OSHA regulations, you will always have exactly the same number of programmers as wiretap victims, and each programmer decodes exactly one wiretap. Because this is the government, to decode a wiretap it takes at least 1 server hour per letter in the victim's name. All programmers share the same secured government terminal and they can only work one at a time. Once signed in, programmers must stay at the terminal until they are finished decoding a wiretap. To make things worse, each programmer has certain personality quirks and foibles which can alter their efficiency.
+
+* Programmers with an even number suffer from vowelitosis, they require an additional 1.5 hours of work for every vowel (Note that the NEA only recognizes the letters A, E, I, O, and U as vowels) in the victim's name.
+* Programmers with an odd number suffer from consonentia, they require an additional 1 hour of work for every consonant in the victim's name.
+* Programmers whose numbers share prime factors with the number of letters in a victim's name are struck with a severe phobia, that requires an additional 2 hours of therapy per common factor. Due to DHS regulations, the programmer must stay at the terminal while under therapy, preventing others from using it. For example, it took programmer 12 (factors of 2 and 3) an extra 4 hours of therapy to decode NORMAN's file (factors of 2 and 3).
+
+You are given 26 programmers, numbered from 1 through 26. The 26 wiretap victims are named as follows:
+
+ANDROMEDA
+BARBARA
+CAMERON
+DAGMAR
+EKATERINA
+FLANNERY
+GREGORY
+HAMILTON
+ISABELLA
+JEBEDIAH
+KIMBERLEY
+LARISSA
+MEREDITH
+NORMAN
+OSWALD
+PENELOPE
+QUENTIN
+RANDALL
+SAVANNAH
+TABITHA
+URSULA
+VIVIENNE
+WINONA
+XAVIER
+YVONNE
+ZENOBIA
+
+Write a program that tasks your team of programmers to the wiretap victims in a way that minimizes the total time necessary to crack all the wiretaps. Your program should run on the command line, and take as input a file containing the first names of all the wiretap victims (newline separated). Your program should be able to handle both upper and lower case, be robust, and it should work for as large a general case as possible. Remember, your congressional hearing is coming up and your lawyers may need more evidence to clear you of wrong doing!
+
+You may use any of the following programming languages:
+
+========================================================================================================================
+
+
+Problem reduction:
+
+1) V_i: V is the number of vowels in wireTap "i"s name
+
+2) C_i: C is the number of consonants in wireTap "i"s name
+            NOTE: any letter which is not a vowel is considered a consonant
+
+3) Prime[i] = array of numbers 1-26, of which the prime factors of the length of wireTap's anme are marked "1", and 0 otherwise
+
+4) PrimeFactor[j][3] = prime factors for programmer, filled statically
+                       // can be never more than 3 prime factors for numb <=26
+
+5) Cost for a programmer "j" to decode wireTap "i" =
+       1 + (IsEven(j)*(1.5*V_i)) + (isOdd(j)*(C_i)) + 
+            (NUM_COMMON_FACTOR(Prime[i], PrimeFactor[j])*2)
+
+6) Now the problem reduces to 26 x 26 matrix 
+
+     M      M     M     ...   M     M
+      1,1    1,2   1,3   ...  1,25   1,26
+                                     
+     M      M     M     ...   M     M
+      2,1    2,2   2,3   ...  2,25   2,26
+
+      ...
+      ...
+      ...
+
+     M      M     M     ...   M     M
+      25,1   25,2  25,3  ...  25,25  25,26
+                                     
+     M      M     M     ...   M    M
+      26,1   26,2  26,3  ...  26,25  26,26
+
+
+    Where:
+       M      = cost programmer "i" decoding wireTap "j"
+        ij        
+
+
+7) Apply cost reduction formulae: Munkres Algorithm 
+
+   Matrix will have Star Zero's for optimal assignment.
+                   
+   Complexity = O(n cube) 
+
+References :
+   http://csclab.murraystate.edu/bob.pilgrim/445/munkres.html
+   http://en.wikipedia.org/wiki/Hungarian_algorithm
